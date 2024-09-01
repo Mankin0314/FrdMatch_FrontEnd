@@ -50,7 +50,7 @@ const onSearch = (val) =>{
 
   <div id="teamPage">
     <van-search v-model="searchText" placeholder="搜索队伍"  @search="onSearch"/>
-    <van-button type="primary" @click="doJoinTeam">加入队伍</van-button>
+    <van-button type="primary" @click="doJoinTeam">创建队伍</van-button>
     <team-card-list :team-list="teamList"></team-card-list>
     <van-empty v-if="!teamList || teamList.length < 1" description="搜索结果为空" />
   </div>

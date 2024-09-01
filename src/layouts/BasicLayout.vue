@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import {showToast} from "vant";
 import { ref } from 'vue';
-import {useRouter} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
+import routes from "../config/routes.ts";
 const router = useRouter();
 
 const onClickLeft = () =>{
@@ -11,12 +12,27 @@ const onClickRight = () => {
    router.push("/search")
 };
 const active = ref("index");
-const onChange = (index) => showToast(`标签 ${index}`);
+const route = useRoute();
+const DEFAULT_TITLE = '伙伴匹配';
+const title = ref('DEFAULT_TITLE');
+
+//根据路由切换标题
+router.beforeEach((to, from) => {
+  const toPath = to.path;
+  const route = routes.find((route) =>{
+   return  toPath == route.path;
+  })
+  if (!route?.title){
+    title.value =  DEFAULT_TITLE;
+  }else {
+    title.value = route.title;
+  }
+})
 </script>
 
 <template>
   <van-nav-bar
-      title="标题"
+      :title="title"
       right-text="按钮"
       left-arrow
       @click-left="onClickLeft"

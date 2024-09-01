@@ -62,7 +62,7 @@ const onSearch = () => {
 
     const doSearch = () => {
       router.push({
-        path:'/search/result',
+        path:'/search/list',
         query:{
           tags:activeIds.value
         }

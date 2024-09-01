@@ -11,6 +11,17 @@ import { Cell, CellGroup } from 'vant';
 import { Form, Field } from 'vant';
 import { Toast } from 'vant';
 import { Card } from 'vant';
+import {
+    Skeleton,
+    SkeletonTitle,
+    SkeletonImage,
+    SkeletonAvatar,
+    SkeletonParagraph,
+} from 'vant';
+
+
+
+
 const app = createApp(App)
 app.use(Button);
 app.use(NavBar);
@@ -27,6 +38,13 @@ app.use(Field);
 app.use(Card);
 app.use(Empty);
 app.use(Toast);
+app.use(Skeleton);
+app.use(SkeletonTitle);
+app.use(SkeletonImage);
+app.use(SkeletonAvatar);
+app.use(SkeletonParagraph);
+
+
 
 const router = VueRouter.createRouter({
     history:VueRouter.createWebHashHistory(),
