@@ -19,6 +19,10 @@ axiosInstance.interceptors.request.use(function (config) {
 axiosInstance.interceptors.response.use(function (response) {
     // 对响应数据做点什么
     console.log("我收到响应啦",response)
+    if (response?.data?.code === 40100){
+        const redirectUrl = window.location.href ;
+        window.location.href =`/user/login?redirect=${redirectUrl}`;
+    }
     console.log(response)
     return response.data;
 }, function (error) {

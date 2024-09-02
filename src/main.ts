@@ -18,6 +18,7 @@ import {
     SkeletonAvatar,
     SkeletonParagraph,
 } from 'vant';
+import '../global.css'
 
 
 
@@ -47,7 +48,7 @@ app.use(SkeletonParagraph);
 
 
 const router = VueRouter.createRouter({
-    history:VueRouter.createWebHashHistory(),
+    history:VueRouter.createWebHistory(),
     routes,
 })
 

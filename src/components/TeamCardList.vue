@@ -25,7 +25,7 @@
         </div>
       </template>
       <template #footer>
-        <van-button size="small" type="primary" v-if="team.userId !== currentUser?.id && !team.hasJoin" plain @click="doJoinTeam(team.id)">加入队伍</van-button>
+        <van-button size="small" type="primary" v-if="team.userId !== currentUser?.id && !team.hasJoin" plain @click="preJoinTeam(team)">加入队伍</van-button>
 
         <van-button v-if="team.userId === currentUser?.id" size="small" plain
                     @click="doUpdateTeam(team.id)">更新队伍
@@ -40,6 +40,10 @@
       </template>
     </van-card>
   </div>
+
+  <van-dialog v-model:show="showPasswordDialog" title="请输入密码" show-cancel-button @confirm="doJoinTeam" @cancel="doJoinCancel">
+    <van-field v-model="password" placeholder="请输入密码"/>
+  </van-dialog>
 
 </template>
 
@@ -68,16 +72,46 @@ const router = useRouter();
 /**
  * 加入队伍
  */
-const doJoinTeam = async (id:number) => {
-  const res = await myAxios.post('/team/join', {
-    teamId: id,
 
+/**
+ * 加入队伍
+ */
+const doJoinTeam = async () => {
+  if (!joinTeamId.value){
+    return;
+  }
+  const res = await myAxios.post('/team/join', {
+    teamId: joinTeamId.value,
+    password: password.value
   });
   if (res?.code === 0) {
     showToast('加入成功');
+    doJoinCancel();
   } else {
     showToast('加入失败' + (res.description ? `，${res.description}` : ''));
   }
+}
+
+const showPasswordDialog = ref(false);
+const password = ref('');
+const joinTeamId = ref(0);
+
+/**
+ * 判断是不是加密房间，是的话显示密码框
+ * @param team
+ */
+const preJoinTeam = (team: TeamType) => {
+  joinTeamId.value = team.id;
+  if (team.status === 0) {
+    doJoinTeam()
+  } else {
+    showPasswordDialog.value = true;
+  }
+}
+
+const doJoinCancel = () => {
+  joinTeamId.value = 0;
+  password.value = '';
 }
 
 //退出队伍

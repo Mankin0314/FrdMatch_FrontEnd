@@ -8,9 +8,8 @@ import {showToast} from "vant";
 
 
 
-
 const router = useRouter();
-const doJoinTeam = () =>{
+const doCreateTeam = () =>{
   router.push({
     path:"/team/add",
   })
@@ -21,10 +20,11 @@ const searchText = ref('');
 const teamList = ref([]);
 
 
-const listTeam = async (val = '') => {
+const listTeam = async (val = '', status = 0) => {
   const res= await myAxios.get("/team/list",{
     params:{
      searchText: val,
+      status,
     }
   });
   if(res?.code == 0){
@@ -41,8 +41,15 @@ onMounted( ()=>{
 const onSearch = (val) =>{
   listTeam(val);
 }
+const onTabChange = (name) =>{
+  if (name ==='public'){
+    listTeam(searchText.value,0);
+  }else {
+    listTeam(searchText.value,2);
+  }
+}
 
-
+const active = ref('public');
 
 </script>
 
@@ -50,10 +57,16 @@ const onSearch = (val) =>{
 
   <div id="teamPage">
     <van-search v-model="searchText" placeholder="搜索队伍"  @search="onSearch"/>
-    <van-button type="primary" @click="doJoinTeam">创建队伍</van-button>
+    <van-tabs v-model:active="active" @change="onTabChange">
+      <van-tab title="公开" name="public"/>
+      <van-tab title="加密" name="private"/>
+    </van-tabs>
+    <div style="margin-bottom: 16px"/>
+    <van-button type="primary" class="addBtn" icon="plus" @click="doCreateTeam"/>
     <team-card-list :team-list="teamList"></team-card-list>
     <van-empty v-if="!teamList || teamList.length < 1" description="搜索结果为空" />
   </div>
+
 
 </template>
 
